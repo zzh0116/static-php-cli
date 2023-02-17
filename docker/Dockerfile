@@ -35,7 +35,7 @@ RUN apk add oniguruma-dev > /dev/null
 # php openssl dependencies
 RUN apk add openssl-libs-static openssl-dev openssl > /dev/null
 # php gd dependencies
-RUN apk add libpng-dev libpng-static > /dev/null
+RUN apk add libpng-dev libpng-static libjpeg-turbo-dev libjpeg-turbo-static > /dev/null
 # curl c-ares dependencies
 RUN apk add c-ares-static c-ares-dev > /dev/null
 # php event dependencies
@@ -56,6 +56,8 @@ RUN mkdir /app
 WORKDIR /app
 
 COPY ./* /app/
+
+RUN cd /app/ && wget https://download.savannah.gnu.org/releases/freetype/freetype-2.10.1.tar.gz && tar -zxvf freetype-2.10.1.tar.gz && cd freetype-2.10.1 && ./configure && make && make install
 
 RUN chmod +x /app/*.sh
 
