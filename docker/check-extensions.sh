@@ -103,7 +103,7 @@ function check_in_configure() {
         gd)
             case $1 in
             7.3.*|7.2.*)    php_configure="$php_configure --with-gd" ;;
-            7.4.*|8.*)      php_configure="$php_configure --enable-gd" ;;
+            7.4.*|8.*)      php_configure="$php_configure --enable-gd --with-freetype --with-jpeg" ;;
             esac
             ;;
         hash)
