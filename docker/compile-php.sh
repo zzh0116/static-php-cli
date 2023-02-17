@@ -23,6 +23,7 @@ function generate_ext_dialog_cmd() {
 function php_compile_args() {
     _php_arg="--prefix=$self_dir/php-dist"
     _php_arg="$_php_arg --disable-all"
+    _php_arg="$_php_arg --enable-session=yes"
     _php_arg="$_php_arg --enable-shared=no"
     _php_arg="$_php_arg --enable-static=yes"
     _php_arg="$_php_arg --enable-inline-optimization"
