@@ -52,7 +52,7 @@ jobs:
             tar -zcvf "micro-${{ matrix.php-versions }}-${{ matrix.arch }}.tar.gz" ./micro.sfx && rm ./micro.sfx
           fi
       - name: Deploy to Zhamao Server
-        uses: easingthemes/ssh-deploy@v4.1.1
+        uses: easingthemes/ssh-deploy@v4.1.8
         env:
           SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SERVER_SECRET_KEY }}
           ARGS: "-rltgoDzvO"
