@@ -1,0 +1,50 @@
+name: Test ssh
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - ".github/workflows/**.yml"
+      - "docker/**"
+
+jobs:
+  integration:
+    name: Build PHP ${{ matrix.php-versions }} for ${{ matrix.arch }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: [ "7.4.33", "8.0.28", "8.1.15", "8.2.3" ]
+        arch: [ "x86_64", "aarch64", "armv7l" ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check Dockerfile to ${{ matrix.arch }}
+        run: |
+          cd docker/
+          if [[ "${{ matrix.arch }}" != "x86_64" ]]; then
+            if [[ "${{ matrix.arch }}" = "armv7l" ]]; then
+              sed -ie 's/alpine:latest/multiarch\/alpine:armv7-latest-stable/g' Dockerfile
+            else
+              sed -ie 's/alpine:latest/multiarch\/alpine:${{ matrix.arch }}-v3.16/g' Dockerfile
+            fi
+            docker run --rm --privileged multiarch/qemu-user-static:register --reset
+          fi
+      - name: Build micro and PHP distribution ${{ matrix.php-versions }} for ${{ matrix.arch }}
+        id: buildphp
+        run: |
+          cd docker/ && \
+            mkdir ../dist && \
+            touch ../dist/test.log
+      - name: Deploy to Zhamao Server
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SERVER_SECRET_KEY }}
+          ARGS: "-rltgoDzvO"
+          SOURCE: "dist/"
+          REMOTE_HOST: ${{ secrets.DEPLOY_SERVER_HOST }}
+          REMOTE_PORT: ${{ secrets.DEPLOY_SERVER_PORT }}
+          REMOTE_USER: ${{ secrets.DEPLOY_SERVER_USER }}
+          TARGET: ${{ secrets.DEPLOY_SERVER_TARGET }}
+      - name: Remove dist directory
+        run: |
+          rm -rf dist/
+          docker images | grep -v REPOSITORY | awk '{print $3}' | xargs docker rmi --force
