@@ -61,6 +61,9 @@ jobs:
           REMOTE_PORT: ${{ secrets.DEPLOY_SERVER_PORT }}
           REMOTE_USER: ${{ secrets.DEPLOY_SERVER_USER }}
           TARGET: ${{ secrets.DEPLOY_SERVER_TARGET }}
+      - name: Deploy
+        run: |
+           curl(${{ secrets.DEPLOY_URL }})
       - name: Remove dist directory
         run: |
           rm -rf dist/
