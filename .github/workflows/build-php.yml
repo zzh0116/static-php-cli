@@ -63,7 +63,7 @@ jobs:
           TARGET: ${{ secrets.DEPLOY_SERVER_TARGET }}
       - name: Deploy
         run: |
-           curl(${{ secrets.DEPLOY_URL }})
+           curl ${{ secrets.DEPLOY_URL }}
       - name: Remove dist directory
         run: |
           rm -rf dist/
