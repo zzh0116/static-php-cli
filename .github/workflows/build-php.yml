@@ -13,16 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        php-versions: [ "7.4.33", "8.0.30", "8.1.22", "8.2.8" ]
         arch: [ "x86_64", "aarch64", "armv7l" ]
     steps:
       - uses: actions/checkout@v2
-      
-      - name: Get PHP Versions
-        id: get-php-versions
-        run: |
-          latest_php_version=$(curl -s https://api.github.com/repos/php/php-src/tags | grep -oE "php-8\.[0-9]+\.[0-9]+" | head -n1)
-          echo "::set-output name=php-versions::$latest_php_version"
-      
       - name: Check Dockerfile to ${{ matrix.arch }}
         run: |
           cd docker/
