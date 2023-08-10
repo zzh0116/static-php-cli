@@ -9,7 +9,7 @@ on:
 
 jobs:
   integration:
-   name: Build PHP ${{ matrix.php-versions }} for ${{ matrix.arch }}
+    name: Build PHP ${{ matrix.php-versions }} for ${{ matrix.arch }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
