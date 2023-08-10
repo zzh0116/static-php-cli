@@ -14,7 +14,7 @@
         "link_2": "https://pecl.php.net/get/swoole-{version}.tgz"
     },
     "mongodb": {
-        "version": "1.13.0",
+        "version": "1.16.1",
         "link": "http://mirrors.zhamao.xin/pecl/mongodb-{version}.tgz",
         "link_2": "https://pecl.php.net/get/mongodb-{version}.tgz"
     },
