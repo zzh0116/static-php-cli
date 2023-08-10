@@ -9,19 +9,20 @@ on:
 
 jobs:
   integration:
-    name: Build PHP ${{ matrix.php-versions }} for ${{ matrix.arch }}
+   name: Build PHP ${{ matrix.php-versions }} for ${{ matrix.arch }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: ${{ steps.get-php-versions.outputs.php-versions }}
         arch: [ "x86_64", "aarch64", "armv7l" ]
     steps:
+      - uses: actions/checkout@v2
+      
       - name: Get PHP Versions
         id: get-php-versions
         run: |
-          echo "::set-output name=php-versions::$(curl -s https://api.github.com/repos/php/php-src/tags | grep -Eo '\"php-8\.[0-9]+\.[0-9]+\"' | sort -rV | head -n 3)"
-    
-      - uses: actions/checkout@v2
+          latest_php_version=$(curl -s https://api.github.com/repos/php/php-src/tags | grep -oE "php-8\.[0-9]+\.[0-9]+" | head -n1)
+          echo "::set-output name=php-versions::$latest_php_version"
+      
       - name: Check Dockerfile to ${{ matrix.arch }}
         run: |
           cd docker/
